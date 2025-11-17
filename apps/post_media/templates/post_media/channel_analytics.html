@@ -1,0 +1,90 @@
+{% load static %}
+{% load custom_filters %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>📈 Channel Analytics</title>
+  <link rel="stylesheet" href="{% static 'post_media/css/analytics.css' %}">
+</head>
+<body>
+  <h1>📈 Channel Analytics Dashboard</h1>
+
+  <div class="export-container">
+    <a href="{% url 'post_media:export_channel_analytics_excel' %}?market={{ selected_market }}&channel={{ selected_channel_type }}" class="export-btn">
+      📤 Export to Excel
+    </a>
+  </div>
+
+  <form method="get" class="filter-form">
+    <label>Market:</label>
+    <select name="market" onchange="this.form.submit()">
+      <option value="">Semua</option>
+      {% for m in markets %}
+        <option value="{{ m.name }}" {% if selected_market == m.name %}selected{% endif %}>{{ m.name }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Channel:</label>
+    <select name="channel" onchange="this.form.submit()">
+      <option value="">Semua</option>
+      <option value="ig" {% if selected_channel_type == "ig" %}selected{% endif %}>Instagram</option>
+      <option value="threads" {% if selected_channel_type == "threads" %}selected{% endif %}>Threads</option>
+      <option value="linkedin" {% if selected_channel_type == "linkedin" %}selected{% endif %}>LinkedIn</option>
+      <option value="tiktok" {% if selected_channel_type == "tiktok" %}selected{% endif %}>TikTok</option>
+      <option value="blog" {% if selected_channel_type == "blog" %}selected{% endif %}>Blog</option>
+    </select>
+  </form>
+
+  {% for market_data in data_by_market %}
+    <div class="market-block">
+      <h2>🏢 {{ market_data.market.name }}</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Judul</th>
+            <th>Jenis Konten</th>
+            <th>Channel</th>
+            <th>Tanggal Posting</th>
+            <th>Performance (1 Bulan)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in market_data.channels %}
+            <tr>
+              <td data-label="Judul">
+                <a href="{% url 'post_media:channel_edit' item.obj.pk %}" class="judul-link">
+                  {{ item.obj.judul }}
+                </a>
+              </td>
+              <td data-label="Jenis Konten">{{ item.obj.jenis_konten }}</td>
+              <td data-label="Channel">{{ item.obj.channel|title }}</td>
+              <td data-label="Tanggal Posting">
+                {% if item.obj.tanggal_posting %}
+                  {{ item.obj.tanggal_posting|date:"d M Y H:i" }}
+                {% else %}
+                  <em>Belum diisi</em>
+                {% endif %}
+              </td>
+              <td data-label="Performance">
+                {% with metrics=item.performances|get_item:"1 Bulan" %}
+                  {% if metrics %}
+                    <div class="performance-inline">
+                      {% for label, value, raw in metrics %}
+                        <span>{{ label }}: {{ value }}</span>
+                      {% endfor %}
+                      <a href="{% url 'post_media:update_performance' item.obj.pk %}?period=1m" class="edit-link">✏️ Edit</a>
+                    </div>
+                  {% else %}
+                    <em>Tidak ada data performance</em>
+                  {% endif %}
+                {% endwith %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endfor %}
+</body>
+</html>

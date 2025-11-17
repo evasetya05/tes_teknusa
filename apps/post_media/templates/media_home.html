@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Media</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            position: relative;
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        nav a, nav button {
+            background: none;
+            border: none;
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        nav ul ul {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            list-style: none;
+            z-index: 10;
+            border-radius: 5px;
+            min-width: 180px;
+        }
+
+        nav ul ul li {
+            display: block;
+            margin: 5px 0;
+        }
+
+        nav ul ul li a {
+            color: #000;
+            font-weight: normal;
+        }
+
+        nav ul ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Ketika aktif, tampilkan submenu */
+        .show-menu {
+            display: block !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li>
+                <button id="marketing-btn">Marketing ▼</button>
+                <ul id="marketing-menu">
+                    <li><a href="{% url 'post_media:channel_list' %}">Konten</a></li>
+
+
+                    <a href="{% url 'post_media:channel_analytics' %}">📈 Lihat Analitik</a>
+
+                </ul>
+            </li>
+            <li><a href="#">Tentang</a></li>
+        </ul>
+    </nav>
+
+    <h2>Daftar Channel</h2>
+    <ul>
+        {% for channel in channels %}
+            <li>
+                <a href="{% url 'channel_detail' channel.id %}">
+                    {{ channel.name }}
+                </a>
+                |
+                <a href="{% url 'channel_edit' channel.id %}">Edit</a>
+            </li>
+        {% empty %}
+            <li>Tidak ada channel tersedia.</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Toggle menu ketika tombol Marketing diklik
+        const btn = document.getElementById('marketing-btn');
+        const menu = document.getElementById('marketing-menu');
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation(); // cegah klik dari menutup menu
+            menu.classList.toggle('show-menu');
+        });
+
+        // Klik di luar menu akan menutup submenu
+        document.addEventListener('click', function () {
+            menu.classList.remove('show-menu');
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+  <h1>{{ object.title }}</h1>
+  <p>{{ object.description }}</p>
+
+  <div style="margin-top: 10px; margin-bottom: 20px;">
+    <a href="{% url 'lean:idea_edit' object.pk %}" class="btn btn-primary">✏️ Edit Idea</a>
+    <a href="{% url 'lean:idea_list' %}" class="btn btn-secondary">← Back to List</a>
+  </div>
+
+  <hr>
+
+  <h3>Builds</h3>
+  {% for build in object.builds.all %}
+    <div class="card">
+      <h4>{{ build.title }}</h4>
+      <p>{{ build.description|truncatechars:150 }}</p>
+      <p><a href="#">Open Build</a></p>
+    </div>
+  {% empty %}
+    <p>No builds yet.</p>
+  {% endfor %}
+
+  <hr>
+
+  <h3>Products</h3>
+  {% for p in object.products.all %}
+    <div class="card">
+      <h4>{{ p.name }}</h4>
+      <p>{{ p.description }}</p>
+    </div>
+  {% empty %}
+    <p>No products yet.</p>
+  {% endfor %}
+
+  <hr>
+
+  <h3>Measures</h3>
+  {% for m in object.measures.all %}
+    <div class="card">
+      <strong>{{ m.metric_name }}</strong>: {{ m.value }}
+    </div>
+  {% empty %}
+    <p>No measures yet.</p>
+  {% endfor %}
+
+  <hr>
+
+  <h3>Data Points</h3>
+  {% for d in object.datapoints.all %}
+    <div class="card">
+      <p>{{ d.note }}</p>
+      <small>{{ d.created_at|naturaltime }}</small>
+    </div>
+  {% empty %}
+    <p>No data recorded yet.</p>
+  {% endfor %}
+
+  <hr>
+
+  <h3>Learnings</h3>
+  {% for l in object.learnings.all %}
+    <div class="card">
+      <p>{{ l.summary }}</p>
+    </div>
+  {% empty %}
+    <p>No learnings yet.</p>
+  {% endfor %}
+</div>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+  }
+  h1, h3 {
+    color: #333;
+  }
+  .btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-right: 8px;
+  }
+  .btn-primary {
+    background: #007bff;
+    color: #fff;
+  }
+  .btn-secondary {
+    background: #6c757d;
+    color: #fff;
+  }
+  .card {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.1);
+  }
+</style>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% load static %}
+{% load custom_filters %}
+
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Edit Performance - {{ channel.judul }}</title>
+  <link rel="stylesheet" href="{% static 'post_media/css/update_performance.css' %}">
+</head>
+<body>
+  <a href="{% url 'post_media:channel_detail' channel.pk %}" class="back-link">← Kembali</a>
+  <h1>📈 Edit Performance</h1>
+  <h2>{{ channel.judul }} ({{ channel.get_channel_display }})</h2>
+
+  <div class="period-container">
+    {% for p, perf in performances.items %}
+      <div class="period-card">
+        <h3>
+          {% if p == '24h' %}24 Jam{% elif p == '1w' %}1 Minggu{% else %}1 Bulan{% endif %}
+        </h3>
+
+        <form method="post" class="perf-form">
+          {% csrf_token %}
+          <input type="hidden" name="period" value="{{ p }}">
+
+          <table>
+            <thead>
+              <tr>
+                <th>Metrik</th>
+                <th>Nilai</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              {% comment %} === Metric table otomatis sesuai channel === {% endcomment %}
+              {% for key in metric_fields %}
+              <tr>
+                <td>{{ channel|metric_label:key }}</td>
+
+                <td><input type="number" name="{{ key }}" value="{{ perf.metrics|get_item:key }}"></td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn-save">💾 Simpan {{ p }}</button>
+        </form>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+</html>

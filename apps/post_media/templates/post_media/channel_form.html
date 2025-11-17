@@ -1,0 +1,21 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{% static 'post_media/css/channel_form.css' %}">
+  {{ form.media }}
+</head>
+<body>
+  <a href="{% url 'post_media:channel_list' %}" class="back-link">← Kembali</a>
+  <h1>{{ title }}</h1>
+
+  <form method="post" enctype="multipart/form-data" class="channel-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn-primary">💾 Simpan</button>
+  </form>
+
+</body>
+</html>

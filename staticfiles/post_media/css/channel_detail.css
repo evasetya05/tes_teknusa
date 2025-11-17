@@ -1,0 +1,131 @@
+body {
+  font-family: system-ui, sans-serif;
+  padding: 20px;
+  background-color: #fafafa;
+  color: #222;
+}
+
+a.back-link {
+  text-decoration: none;
+  color: #0077cc;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin-bottom: 4px;
+  font-size: 1.6em;
+}
+
+h2 {
+  margin-top: 30px;
+  font-size: 1.4em;
+}
+
+.performance-form {
+  margin-top: 20px;
+}
+
+.performance-table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.performance-table th, .performance-table td {
+  border: 1px solid #ddd;
+  padding: 8px 10px;
+  text-align: center;
+}
+
+.performance-table th {
+  background-color: #f0f4f8;
+  font-weight: 600;
+}
+
+.performance-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  background-color: #f9fafb;
+}
+
+input[type="number"] {
+  width: 80px;
+  padding: 4px;
+  text-align: right;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="number"]:focus {
+  border-color: #0077cc;
+  outline: none;
+}
+
+.save-container {
+  margin-top: 20px;
+  text-align: right;
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  padding: 20px;
+  background: #fafafa;
+  color: #333;
+}
+
+a.back-link {
+  text-decoration: none;
+  color: #555;
+}
+
+h1, h2 {
+  color: #222;
+  margin-top: 1em;
+}
+
+.detail-table, .performance-table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 10px;
+  background: #fff;
+}
+
+.detail-table th, .detail-table td,
+.performance-table th, .performance-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  vertical-align: top;
+}
+
+.detail-table th {
+  width: 220px;
+  background: #f2f2f2;
+  text-align: left;
+}
+
+.performance-table th {
+  background: #f9f9f9;
+}
+
+.metric {
+  display: inline-block;
+  margin-right: 6px;
+}

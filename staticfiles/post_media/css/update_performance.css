@@ -1,0 +1,92 @@
+:root {
+  --primary: #2c6ac7;
+  --primary-hover: #1b4f99;
+  --border: #ddd;
+  --bg-light: #f9fafc;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-light);
+  color: #333;
+  margin: 0;
+  padding: 30px;
+}
+
+h1 {
+  color: var(--primary);
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+h2 {
+  color: #444;
+  margin-bottom: 25px;
+}
+
+.back-link {
+  text-decoration: none;
+  color: var(--primary);
+  font-weight: 600;
+}
+.back-link:hover { text-decoration: underline; }
+
+.period-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.period-card {
+  flex: 1 1 300px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  padding: 20px;
+  min-width: 280px;
+}
+
+.period-card h3 {
+  margin-top: 0;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+th, td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+}
+
+td input[type="number"] {
+  width: 80px;
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.btn-save {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.btn-save:hover {
+  background: var(--primary-hover);
+}

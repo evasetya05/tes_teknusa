@@ -1,0 +1,108 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+.dashboard-sidebar .nav-link {
+    color: #495057;
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+    transition: all 0.2s ease;
+}
+
+.dashboard-sidebar .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.dashboard-sidebar .nav-link.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.dashboard-sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.user-info-card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+@media (max-width: 768px) {
+    .dashboard-sidebar {
+        margin-bottom: 2rem;
+    }
+}
+</style>
+
+<div class="container-fluid mt-5">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 dashboard-sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Menu</h5>
+                </div>
+                <div class="card-body p-0">
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        <a class="nav-link" href="{% url 'leads:lead_list' %}">
+                            <i class="fas fa-user-plus me-2"></i>Leads
+                        </a>
+                        <a class="nav-link" href="{% url 'lean:idea_list' %}">
+                            <i class="fas fa-stream me-2"></i>Lean
+                        </a>
+                        <a class="nav-link" href="{% url 'ledger:ledger_index' %}">
+                            <i class="fas fa-book me-2"></i>Ledger
+                        </a>
+                        <a class="nav-link" href="{% url 'post_media:channel_list' %}">
+                            <i class="fas fa-photo-video me-2"></i>Post Media
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user me-2"></i>Profile
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-bell me-2"></i>Notifications
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-bar me-2"></i>Reports
+                        </a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-question-circle me-2"></i>Help
+                        </a>
+                        <hr class="my-2 mx-3">
+                        <a class="nav-link text-danger" href="{% url 'account:logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- User Info Card -->
+            <div class="card mt-3 user-info-card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-user-circle fa-3x text-primary"></i>
+                    </div>
+                    <h6 class="card-title">{{ user.get_full_name|default:user.username }}</h6>
+                    <p class="card-text text-muted">{{ user.email }}</p>
+                    <small class="text-muted">Member since {{ user.date_joined|date:"M Y" }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-md-9 col-lg-10">
+            <h1 class="mb-4">Dashboard</h1>
+            <!-- Cards removed as requested -->
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Detail Channel - {{ channel.judul }}</title>
+  <link rel="stylesheet" href="{% static 'post_media/css/channel_detail.css' %}">
+</head>
+<body>
+  <a href="{% url 'post_media:channel_list' %}" class="back-link">← Kembali</a>
+
+  <h1>
+    <a href="{% url 'post_media:channel_edit' channel.pk %}" class="edit-link">
+      {{ channel.judul }} ({{ channel.get_channel_display }})
+    </a>
+  </h1>
+
+  <h2>🧾 Informasi Channel</h2>
+  <table class="detail-table">
+    <tr><th>Judul</th><td>{{ channel.judul }}</td></tr>
+    <tr><th>Akun</th><td>{{ channel.get_akun_display }}</td></tr>
+    <tr><th>Platform</th><td>{{ channel.get_channel_display }}</td></tr>
+    <tr><th>Market</th><td>{{ channel.for_market.name }}</td></tr>
+    <tr><th>Funnel Stage</th><td>{{ channel.get_funnel_stage_display }}</td></tr>
+    <tr><th>Kategori Biaya</th><td>{{ channel.kategori_biaya }}</td></tr>
+    <tr><th>Jenis Konten</th><td>{{ channel.jenis_konten }}</td></tr>
+    {% if channel.rencana_tanggal_posting %}
+      <tr><th>Rencana Posting</th><td>{{ channel.rencana_tanggal_posting }}</td></tr>
+    {% endif %}
+    {% if channel.tanggal_posting %}
+      <tr><th>Tanggal Posting Aktual</th><td>{{ channel.tanggal_posting|date:"d M Y H:i" }}</td></tr>
+    {% endif %}
+    <tr><th>Status Posting</th><td>{{ channel.is_posted|yesno:"Sudah diposting,Belum diposting" }}</td></tr>
+    <tr><th>Isi Konten</th><td>{{ channel.isi_konten|safe }}</td></tr>
+    <tr><th>Dibuat</th><td>{{ channel.created_at }}</td></tr>
+    <tr><th>Diperbarui</th><td>{{ channel.updated_at }}</td></tr>
+  </table>
+
+  <hr>
+
+  <h2>📊 Performance</h2>
+  <table class="performance-table">
+    <thead>
+      <tr>
+        <th>Periode</th>
+        <th>Tanggal</th>
+        <th>Metrics</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for period, perf in performances.items %}
+      <tr>
+        <td>{{ period }}</td>
+        <td>{{ perf.as_of_date }}</td>
+        <td>
+          <a href="{% url 'post_media:update_performance' perf.channel.pk %}?period={{ period }}">
+            {% if perf.metrics %}
+              {% for label, val, raw_key in perf.get_metrics_labeled %}
+                <span class="metric">{{ label }}: {{ val }}</span>{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            {% else %}
+              <em>Belum ada data</em>
+            {% endif %}
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+</body>
+</html>

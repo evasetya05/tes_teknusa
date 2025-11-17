@@ -1,0 +1,118 @@
+:root {
+  --primary: #2c6ac7;
+  --primary-hover: #1b4f99;
+  --bg-light: #f9fafc;
+  --border: #e0e0e0;
+}
+
+body {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: #fff;
+  color: #333;
+  margin: 0;
+  padding: 10px;
+}
+
+h1 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+.top-links {
+  margin-bottom: 12px;
+}
+.top-links a {
+  margin-right: 15px;
+  font-weight: 600;
+}
+
+.market {
+  margin-bottom: 20px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.market h2 {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+  margin: 0 0 8px 0;
+  color: #222;
+  font-size: 16px;
+}
+
+.channel-group {
+  margin-top: 12px;
+}
+
+.channel-group h3 {
+  margin: 8px 0 6px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+li {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 6px 4px;
+  margin: 0;
+  font-size: 13px;
+}
+li:hover { background: #fafafa; }
+
+.channel-group li a.judul { color: inherit; font-weight: 600; }
+.channel-group li span { color: #444; }
+
+.posted-tag { color: #137333; font-weight: 600; }
+
+/* Grid columns with vertical separators */
+.row {
+  display: grid;
+  grid-template-columns: 1fr 160px 140px 160px 80px; /* title, jenis, rencana, posting, status */
+  align-items: center;
+  column-gap: 8px;
+}
+.row .col {
+  padding: 2px 6px;
+  border-left: 1px solid var(--border);
+}
+.row .col:first-child {
+  border-left: none;
+}
+.col-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.col-jenis { color: #555; }
+.col-rencana, .col-posting, .col-status { text-align: left; color: #333; }
+
+/* Sticky header */
+.header-row {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.header-row .col { color: #222; }

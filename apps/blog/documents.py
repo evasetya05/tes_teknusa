@@ -1,0 +1,118 @@
+import time
+from .models import Article, Category, Tag
+from elasticsearch_dsl import Document, Date, Integer, Keyword, Text, Object, Boolean
+
+from django.conf import settings
+from elasticsearch_dsl.connections import connections
+
+ELASTICSEARCH_ENABLED = hasattr(settings, 'ELASTICSEARCH_DSL')
+
+if ELASTICSEARCH_ENABLED:
+    connections.create_connection(hosts=[settings.ELASTICSEARCH_DSL['default']['hosts']])
+
+
+class ElapsedTimeDocument(Document):
+    url = Text()
+    time_taken = Integer()
+    log_datetime = Date()
+    type = Text(analyzer='ik_max_word')
+    useragent = Text()
+
+    class Index:
+        name = 'performance'
+        settings = {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+
+
+class ElapsedTimeDocumentManager:
+
+    @staticmethod
+    def create(url, time_taken, log_datetime, type, useragent):
+        doc = ElapsedTimeDocument(
+            meta={'id': int(round(time.time() * 1000))},
+            url=url,
+            time_taken=time_taken,
+            log_datetime=log_datetime,
+            type=type,
+            useragent=useragent
+        )
+        doc.save()
+
+
+class ArticleDocument(Document):
+    body = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
+    title = Text(analyzer='ik_max_word', search_analyzer='ik_smart')
+    author = Object(properties={
+        'username': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
+        'id': Integer()
+    })
+    category = Object(properties={
+        'name': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
+        'id': Integer()
+    })
+    tags = Object(properties={
+        'name': Text(analyzer='ik_max_word', search_analyzer='ik_smart'),
+        'id': Integer()
+    })
+
+    pub_time = Date()
+    status = Keyword()
+    comment_status = Keyword()
+    type = Keyword()
+    views = Integer()
+    article_order = Integer()
+
+    class Index:
+        name = 'blog'
+        settings = {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+
+
+class ArticleDocumentManager:
+
+    def create_index(self):
+        ArticleDocument.init()
+
+    def delete_index(self):
+        from elasticsearch import Elasticsearch
+        es = Elasticsearch(settings.ELASTICSEARCH_DSL['default']['hosts'])
+        es.options(ignore_status=[400, 404]).indices.delete(index='blog')
+
+    def convert_to_doc(self, articles):
+        return [
+            ArticleDocument(
+                meta={'id': article.id},
+                body=article.body,
+                title=article.title,
+                author={
+                    'username': article.author.username,
+                    'id': article.author.id
+                },
+                category={
+                    'name': article.category.name,
+                    'id': article.category.id
+                },
+                tags=[{'name': t.name, 'id': t.id} for t in article.tags.all()],
+                pub_time=article.pub_time,
+                status=article.status,
+                comment_status=article.comment_status,
+                type=article.type,
+                views=article.views,
+                article_order=article.article_order
+            ) for article in articles
+        ]
+
+    def rebuild(self, articles=None):
+        ArticleDocument.init()
+        articles = articles if articles else Article.objects.all()
+        docs = self.convert_to_doc(articles)
+        for doc in docs:
+            doc.save()
+
+    def update_docs(self, docs):
+        for doc in docs:
+            doc.save()

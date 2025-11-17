@@ -1,0 +1,52 @@
+{% load static %}
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Channels per Market</title>
+  <link rel="stylesheet" href="{% static 'post_media/css/channel_list.css' %}">
+</head>
+
+<body>
+  <div class="top-links">
+    <a href="{% url 'post_media:channel_add' %}">➕ Tambah Konten</a>
+    <a href="{% url 'post_media:channel_analytics' %}">📊 Lihat Analitik</a>
+  </div>
+
+  <h1>Channels per Market</h1>
+
+  {% for item in market_channels %}
+    <div class="market">
+      <h2>{{ item.market.name }}</h2>
+
+      {% for ch_name, channels in item.grouped_channels.items %}
+        <div class="channel-group">
+          <h3>{{ ch_name|title }}</h3>
+          <div class="row header-row">
+            <span class="col col-title">Judul</span>
+            <span class="col col-jenis">Jenis</span>
+            <span class="col col-rencana">Rencana</span>
+            <span class="col col-posting">Posting</span>
+            <span class="col col-status">Status</span>
+          </div>
+          <ul>
+            {% for ch in channels %}
+              <li>
+                <div class="row">
+                  <a class="col col-title" href="{% url 'post_media:channel_detail' ch.pk %}">{{ ch.judul }}</a>
+                  <span class="col col-jenis">{{ ch.jenis_konten }}</span>
+                  <span class="col col-rencana">{% if ch.rencana_tanggal_posting %}{{ ch.rencana_tanggal_posting|date:"d M Y" }}{% else %}-{% endif %}</span>
+                  <span class="col col-posting">{% if ch.tanggal_posting %}{{ ch.tanggal_posting|date:"d M Y H:i" }}{% else %}-{% endif %}</span>
+                  <span class="col col-status">{% if ch.is_posted %}<span class="posted-tag">Posted</span>{% else %}-{% endif %}</span>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  {% empty %}
+    <p>Tidak ada channel ditemukan.</p>
+  {% endfor %}
+</body>
+</html>

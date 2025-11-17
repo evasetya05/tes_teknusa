@@ -1,0 +1,111 @@
+{% extends 'lean/base.html' %}
+{% block content %}
+<div class="container">
+  <div class="header">
+    <h2>💡 Ideas</h2>
+    <a href="{% url 'lean:idea_create' %}" class="btn btn-primary">➕ New Idea</a>
+  </div>
+
+  {% for idea in ideas %}
+    <div class="card">
+      <h3><a href="{{ idea.get_absolute_url }}">{{ idea.title }}</a></h3>
+      <p>{{ idea.description|truncatechars:200 }}</p>
+      <div class="meta">
+        <span>Status: <strong>{{ idea.get_status_display }}</strong></span> |
+        <span>Priority: <strong>{{ idea.priority }}</strong></span>
+        <span class="date">Created: {{ idea.created_at|date:"d M Y" }}</span>
+      </div>
+    </div>
+  {% empty %}
+    <p class="empty">No ideas yet. <a href="{% url 'lean:idea_create' %}">Create one</a>.</p>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn-page">← Prev</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn-page">Next →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    font-family: "Segoe UI", sans-serif;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+  }
+  .header h2 {
+    color: #333;
+    margin: 0;
+  }
+  .btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+  }
+  .btn-primary {
+    background: #007bff;
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background: #0069d9;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .card h3 {
+    margin-top: 0;
+    color: #007bff;
+  }
+  .card p {
+    margin: 10px 0;
+    color: #444;
+  }
+  .meta {
+    font-size: 0.9em;
+    color: #666;
+  }
+  .date {
+    float: right;
+    color: #999;
+  }
+  .pagination {
+    text-align: center;
+    margin-top: 30px;
+  }
+  .btn-page {
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 6px 12px;
+    border-radius: 5px;
+    margin: 0 4px;
+    color: #333;
+    text-decoration: none;
+  }
+  .btn-page:hover {
+    background: #e9ecef;
+  }
+  .empty {
+    text-align: center;
+    margin-top: 40px;
+    color: #555;
+  }
+</style>
+{% endblock %}

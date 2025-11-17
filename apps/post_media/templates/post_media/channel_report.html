@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Channel - {{ channel.judul }}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        .metric-table th, .metric-table td {
+            text-align: center;
+        }
+        .metric-table {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Detail Channel: {{ channel.judul }}</h1>
+    <p><strong>Akun:</strong> {{ channel.akun }}</p>
+    <p><strong>Channel:</strong> {{ channel.ChannelSimple }}</p>
+    <p><strong>Jenis Konten:</strong> {{ channel.jenis_konten }}</p>
+    <p><strong>Rencana Tanggal Posting:</strong> {{ channel.rencana_tanggal_posting }}</p>
+    <p><strong>Funnel Stage:</strong> {{ channel.funnel_stage }}</p>
+    <p><strong>Kategori Biaya:</strong> {{ channel.kategori_biaya }}</p>
+    <p><strong>Lama Jam:</strong> {{ channel.lama_jam }} jam</p>
+    <p><strong>Follower:</strong> {{ channel.follower }}</p>
+    <p><strong>Discovery:</strong> {{ channel.discovery }}</p>
+    
+    <h2>Isi Konten</h2>
+    <div>
+        {{ channel.isi_konten|safe }}
+    </div>
+
+    <h2 class="mt-4">Metrics</h2>
+    {% if channel.metrics.all %}
+    <table class="table table-bordered metric-table">
+        <thead class="table-light">
+            <tr>
+                <th>Periode</th>
+                <th>Impressions</th>
+                <th>Member Reached</th>
+                <th>View</th>
+                <th>Email Send</th>
+                <th>Email Open Rate (%)</th>
+                <th>Reactions Like</th>
+                <th>Comment</th>
+                <th>Repost/Share</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for metric in channel.metrics.all %}
+            <tr>
+                <td>{{ metric.period }}</td>
+                <td>{{ metric.impressions }}</td>
+                <td>{{ metric.member_reached }}</td>
+                <td>{{ metric.view }}</td>
+                <td>{{ metric.email_send }}</td>
+                <td>{{ metric.email_open_rate|floatformat:2 }}</td>
+                <td>{{ metric.reactions_like }}</td>
+                <td>{{ metric.comment }}</td>
+                <td>{{ metric.repost_share }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>Tidak ada metrics untuk channel ini.</p>
+    {% endif %}
+
+    <a href="{% url 'channel_edit' channel.pk %}" class="btn btn-primary mt-3">Edit Channel</a>
+    <a href="{% url 'channel_list' %}" class="btn btn-secondary mt-3">Kembali ke Daftar Channel</a>
+</div>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+/* ====== GLOBAL STYLE ====== */
+body {
+  font-family: system-ui, sans-serif;
+  padding: 24px;
+  background: #f9fafb;
+  color: #1f2937;
+}
+
+/* ====== HEADER ====== */
+h1 {
+  color: #1e3a8a;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+/* ====== FILTER ====== */
+.filter-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+select {
+  border: 1px solid #d1d5db;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #f9fafb;
+}
+
+/* ====== TABEL ====== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 18px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  table-layout: fixed;
+}
+
+th {
+  background: #2563eb;
+  color: #fff;
+  text-align: left;
+  padding: 10px;
+  font-weight: 600;
+}
+
+td {
+  border-top: 1px solid #e5e7eb;
+  padding: 8px;
+  vertical-align: top;
+  color: #374151;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* ====== PROPOSI KOLOM ====== */
+th:nth-child(1), td:nth-child(1) { width: 20%; }  /* Judul */
+th:nth-child(2), td:nth-child(2) { width: 10%; }  /* Jenis Konten */
+th:nth-child(3), td:nth-child(3) { width: 8%; }   /* Channel */
+th:nth-child(4), td:nth-child(4) { width: 12%; }  /* Tanggal Posting */
+th:nth-child(5), td:nth-child(5) { width: 50%; }  /* Performance */
+
+tr:nth-child(even) { background: #f9fafb; }
+
+tr:hover {
+  background: #e0e7ff;
+  transition: background 0.2s ease;
+}
+
+/* ====== BOX ====== */
+.market-block {
+  background: #f3f4f6;
+  padding: 16px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.period-box {
+  background: #f9fafb;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid #e5e7eb;
+}
+
+/* ====== LINK ====== */
+a.judul-link {
+  color: #111827;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  line-height: 1.4;
+}
+
+a.judul-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+a.edit-link {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a.edit-link:hover {
+  text-decoration: underline;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr { display: block; }
+  th { display: none; }
+
+  tr {
+    margin-bottom: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    padding: 10px;
+  }
+
+  td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+/* ====== PERFORMANCE SECTION ====== */
+td[data-label="Performance"] {
+  overflow-x: auto;
+  white-space: nowrap;
+  vertical-align: top;
+  padding-bottom: 6px;
+  display: block;
+  width: 100%;             /* scroll sejajar penuh */
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  -ms-overflow-style: auto;
+}
+
+/* Scrollbar tampak rapi */
+td[data-label="Performance"]::-webkit-scrollbar {
+  height: 6px;
+}
+td[data-label="Performance"]::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+td[data-label="Performance"]::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Baris metrik performance horizontal */
+.performance-inline {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: max-content;
+}
+
+/* Setiap metrik */
+.performance-inline span {
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+/* Tombol edit di dalam performance */
+.performance-inline .edit-link {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+/* Hover state */
+.performance-inline .edit-link:hover {
+  text-decoration: underline;
+}
+
+
+.export-container {
+  margin-bottom: 12px;
+  text-align: right;
+}
+
+.export-btn {
+  background: #1e3a8a;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.export-btn:hover {
+  background: #2563eb;
+}

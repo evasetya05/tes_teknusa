@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Detail Lead</title>
+<style>
+/* ======== GAYA UMUM ======== */
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  margin: 30px;
+  background-color: #f9fafc;
+  color: #333;
+}
+
+h3, h4 {
+  color: #2b3a55;
+  border-left: 4px solid #4CAF50;
+  padding-left: 8px;
+  margin-top: 25px;
+}
+
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ======== INPUT DAN SELECT ======== */
+select, input[type="text"], textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+select:focus, input:focus, textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+/* ======== TOMBOL ======== */
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  font-size: 15px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* ======== DAFTAR INTERAKSI ======== */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 15px;
+}
+
+ul li {
+  background-color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+hr {
+  margin: 30px 0;
+  border: none;
+  border-top: 2px dashed #ccc;
+}
+
+/* Badge styles */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  color: white;
+}
+
+.bg-danger { background-color: #dc3545; }
+.bg-warning { background-color: #ffc107; color: black; }
+.bg-secondary { background-color: #6c757d; }
+.bg-success { background-color: #28a745; }
+.bg-primary { background-color: #007bff; }
+</style>
+</head>
+
+<body>
+
+<h3>Detail Lead: {{ lead.name }}</h3>
+<div style="background-color: #fff; padding: 20px; border-radius: 10px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+    <p><strong>Nama:</strong> {{ lead.name }}</p>
+    <p><strong>Email:</strong> {{ lead.email|default:"-" }}</p>
+    <p><strong>Phone:</strong> {{ lead.phone|default:"-" }}</p>
+    <p><strong>Perusahaan:</strong> {{ lead.company|default:"-" }}</p>
+    <p><strong>Lead Source:</strong> {{ lead.get_lead_source_display|default:"-" }}</p>
+    <p><strong>Priority:</strong> <span class="badge {% if lead.priority == 'hot' %}bg-danger{% elif lead.priority == 'warm' %}bg-warning{% else %}bg-secondary{% endif %}">{{ lead.get_priority_display }}</span></p>
+    <p><strong>Assigned To:</strong> {{ lead.assigned_to.get_full_name|default:lead.assigned_to.username if lead.assigned_to else "-" }}</p>
+    <p><strong>Estimated Value:</strong> {% if lead.estimated_value %}Rp {{ lead.estimated_value|floatformat:0 }}{% else %}-{% endif %}</p>
+    <p><strong>Next Follow-up:</strong> {{ lead.next_follow_up|date:"d/m/Y" if lead.next_follow_up else "-" }}</p>
+    <p><strong>Status:</strong> <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">{{ lead.get_status_display }}</span></p>
+    <p><strong>Created At:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
+    <p><strong>Jumlah Interaksi:</strong> {{ lead.jumlah_interaksi }}</p>
+    <p><strong>Interaksi Terakhir:</strong> {{ lead.interaksi_terakhir|date:"d/m/Y H:i" if lead.interaksi_terakhir else "-" }}</p>
+    {% if lead.general_notes %}
+    <p><strong>General Notes:</strong> {{ lead.general_notes }}</p>
+    {% endif %}
+</div>
+
+<hr>
+
+<h3>Ubah Status</h3>
+<form method="post">
+  {% csrf_token %}
+  <label for="status">Status Lead:</label>
+  <select name="status" id="status">
+    {% for key, label in lead.STATUS_CHOICES %}
+      <option value="{{ key }}" {% if lead.status == key %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" name="change_status">Simpan</button>
+</form>
+
+<hr>
+
+<h3>Interaksi</h3>
+<ul>
+  {% for i in lead.interactions.all %}
+    <li>🕒 {{ i.created_at|date:"d M Y H:i" }} — {{ i.note }}</li>
+  {% empty %}
+    <li>Belum ada interaksi.</li>
+  {% endfor %}
+</ul>
+
+<h4>Tambah Interaksi</h4>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Tambah Interaksi</button>
+</form>
+
+</body>
+</html>
