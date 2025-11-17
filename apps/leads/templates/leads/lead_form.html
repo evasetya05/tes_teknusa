@@ -98,14 +98,23 @@
         color: #111827;
     }
 
-    @media (max-width: 768px) {
-        .lead-card {
-            padding: 20px;
-        }
+    .alert-unsaved {
+        display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        color: #92400e;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
 
-        .form-actions {
-            flex-direction: column-reverse;
-        }
+    .alert-unsaved i {
+        color: #f59e0b;
+        margin-right: 0.5rem;
     }
 </style>
 {% endblock %}
@@ -121,6 +130,20 @@
         Kembali ke daftar
     </a>
 </div>
+
+<div id="unsaved-alert" class="alert-unsaved">
+    <i class="fas fa-exclamation-triangle"></i>
+    Anda memiliki perubahan yang belum disimpan. Jangan lupa menyimpan sebelum meninggalkan halaman.
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <div class="lead-card">
     <h2><i class="fas fa-address-card"></i> Informasi Lead</h2>
@@ -271,4 +294,46 @@
     </form>
 </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let formChanged = false;
+    const form = document.querySelector('form');
+    const alertDiv = document.getElementById('unsaved-alert');
+
+    // Track changes on form inputs
+    form.addEventListener('input', function(e) {
+        if (e.target.matches('input, select, textarea')) {
+            formChanged = true;
+            alertDiv.style.display = 'block';
+        }
+    });
+
+    // Warn before leaving page if form changed
+    window.addEventListener('beforeunload', function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = 'Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?';
+            return e.returnValue;
+        }
+    });
+
+    // Reset flag on successful submit
+    form.addEventListener('submit', function() {
+        formChanged = false;
+        alertDiv.style.display = 'none';
+    });
+
+    // Also handle navigation clicks
+    document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (formChanged && !confirm('Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?')) {
+                e.preventDefault();
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -196,6 +196,15 @@
     </div>
 </div>
 
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <div class="lead-overview-card">
     <div class="d-flex flex-wrap justify-content-between gap-3">
         <div>
@@ -284,24 +293,33 @@
 
     <div class="col-lg-5">
         <div class="info-card status-card">
-            <div class="card-action mb-3">
-                <h2><i class="fas fa-sync-alt"></i> Ubah Status</h2>
-                <small>Pilih status terbaru untuk lead ini.</small>
-            </div>
-            <form method="post" class="row g-3">
+            <form method="post" novalidate>
                 {% csrf_token %}
-                <div class="col-12">
-                    <label for="status" class="form-label">Status Lead</label>
-                    <select name="status" id="status" class="form-select">
-                        {% for key, label in lead.STATUS_CHOICES %}
-                            <option value="{{ key }}" {% if lead.status == key %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="card-action mb-3">
+                    <h2><i class="fas fa-sync-alt"></i> Status &amp; Interaksi</h2>
+                    <small>Perbarui status sekaligus catatan interaksi terbaru.</small>
                 </div>
-                <div class="col-12 text-end">
-                    <button type="submit" name="change_status" class="btn btn-primary btn-icon">
+
+                <div class="mb-3">
+                    <label for="{{ detail_form.status.id_for_label }}" class="form-label">Status Lead</label>
+                    {{ detail_form.status }}
+                    {% if detail_form.status.errors %}
+                        <div class="invalid-feedback d-block">{{ detail_form.status.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ detail_form.note.id_for_label }}" class="form-label">Catatan Interaksi</label>
+                    {{ detail_form.note }}
+                    {% if detail_form.note.errors %}
+                        <div class="invalid-feedback d-block">{{ detail_form.note.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary btn-icon">
                         <i class="fas fa-save"></i>
-                        Simpan Status
+                        Simpan Perubahan
                     </button>
                 </div>
             </form>
@@ -310,7 +328,7 @@
 </div>
 
 <div class="row g-4 mt-1">
-    <div class="col-lg-7">
+    <div class="col-12">
         <div class="info-card">
             <div class="card-action mb-3">
                 <h2><i class="fas fa-comments"></i> Riwayat Interaksi</h2>
@@ -338,33 +356,6 @@
                     <p class="mb-0">Belum ada interaksi yang tercatat.</p>
                 </div>
             {% endif %}
-        </div>
-    </div>
-
-    <div class="col-lg-5">
-        <div class="info-card interaction-form">
-            <div class="card-action mb-3">
-                <h2><i class="fas fa-plus-circle"></i> Tambah Interaksi</h2>
-                <small>Simpan catatan komunikasi terbaru.</small>
-            </div>
-            <form method="post" novalidate>
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>
-                        {% endif %}
-                    </div>
-                {% endfor %}
-                <div class="text-end">
-                    <button type="submit" class="btn btn-success btn-icon">
-                        <i class="fas fa-paper-plane"></i>
-                        Simpan Interaksi
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
