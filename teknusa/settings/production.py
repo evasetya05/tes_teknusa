@@ -1,7 +1,7 @@
 from .base import *
 import os
 
-DEBUG = False  # Production should have DEBUG=False
+DEBUG = True  # Production should have DEBUG=False
 
 ALLOWED_HOSTS = ["teknusa.com", "www.teknusa.com"]
 
