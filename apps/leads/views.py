@@ -74,6 +74,8 @@ def lead_create(request):
 
             messages.success(request, 'Lead berhasil disimpan!')
             return redirect('leads:lead_detail', pk=lead.pk)
+        else:
+            messages.error(request, 'Gagal menyimpan lead baru. Periksa kembali isian formulir.')
     else:
         form = LeadForm()
         formset = InteractionFormSet(instance=Lead())
@@ -94,6 +96,8 @@ def lead_edit(request, pk):
                 formset.save()
             messages.success(request, 'Lead berhasil disimpan!')
             return redirect('leads:lead_detail', pk=lead.pk)
+        else:
+            messages.error(request, 'Gagal menyimpan perubahan lead. Silakan periksa kembali isian Anda.')
     else:
         form = LeadForm(instance=lead)
         formset = InteractionFormSet(instance=lead)

@@ -145,6 +145,22 @@
     {% endfor %}
 {% endif %}
 
+{% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if formset.non_form_errors %}
+    <div class="alert alert-danger" role="alert">
+        {% for error in formset.non_form_errors %}
+            <div>{{ error }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 <div class="lead-card">
     <h2><i class="fas fa-address-card"></i> Informasi Lead</h2>
 
@@ -262,6 +278,19 @@
             {{ formset.management_form }}
             {% for interaction_form in formset %}
                 <div class="interaction-card">
+                    {{ interaction_form.id }}
+                    {% if interaction_form.hidden_fields %}
+                        {% for hidden in interaction_form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                    {% endif %}
+                    {% if interaction_form.non_field_errors %}
+                        <div class="alert alert-danger mb-2" role="alert">
+                            {% for error in interaction_form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="form-floating">
                         {{ interaction_form.note }}
                         <label for="{{ interaction_form.note.id_for_label }}">Catatan Interaksi</label>
