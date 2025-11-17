@@ -148,13 +148,14 @@
             <thead>
                 <tr>
                     <th>Nama</th>
+                    <th>Status</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Perusahaan</th>
                     <th>Account Medsos</th>
                     <th>Lead Source</th>
                     <th>Next Follow-up</th>
-                    <th>Status</th>
+                   
                     <th>Dibuat</th>
                 </tr>
             </thead>
@@ -164,16 +165,17 @@
                     <td data-label="Nama">
                         <a href="{% url 'leads:lead_edit' lead.pk %}" class="text-decoration-none text-primary fw-semibold">{{ lead.name }}</a>
                     </td>
+                    <td data-label="Status">
+                        <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">
+                            {{ lead.get_status_display }}
+                        </span>
                     <td data-label="Email">{{ lead.email|default:"-" }}</td>
                     <td data-label="Phone">{{ lead.phone|default:"-" }}</td>
                     <td data-label="Perusahaan">{{ lead.company|default:"-" }}</td>
                     <td data-label="Account Medsos">{{ lead.account_medsos|default:"-" }}</td>
                     <td data-label="Lead Source">{{ lead.get_lead_source_display|default:"-" }}</td>
                     <td data-label="Next Follow-up">{% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d/m/Y" }}{% else %}-{% endif %}</td>
-                    <td data-label="Status">
-                        <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">
-                            {{ lead.get_status_display }}
-                        </span>
+                    
                     </td>
                     <td data-label="Dibuat">{{ lead.created_at|date:"d/m/Y" }}</td>
                 </tr>
