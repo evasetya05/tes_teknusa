@@ -120,20 +120,40 @@
         min-height: 48px;
     }
 
-    .interaction-card {
-        background: #fff;
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
-        padding: 18px;
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
-        margin-bottom: 1rem;
+    .interaction-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
-    .interaction-card time {
-        display: block;
-        font-size: 0.8rem;
+    .interaction-item {
+        display: flex;
+        gap: 0.85rem;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .interaction-item:last-child {
+        border-bottom: none;
+    }
+
+    .interaction-meta {
+        min-width: 120px;
+        font-size: 0.78rem;
         color: #6b7280;
-        margin-bottom: 0.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .interaction-meta i {
+        color: #2563eb;
+    }
+
+    .interaction-note {
+        flex: 1;
+        font-size: 0.95rem;
+        color: #1f2937;
     }
 
     .empty-state {
@@ -297,17 +317,27 @@
                 <small>Catatan percakapan dan tindak lanjut.</small>
             </div>
 
-            {% for interaction in lead.interactions.all %}
-                <div class="interaction-card">
-                    <time><i class="far fa-clock me-2"></i>{{ interaction.created_at|date:"d M Y, H:i" }}</time>
-                    <p class="mb-0">{{ interaction.note }}</p>
-                </div>
-            {% empty %}
+            {% if lead.interactions.exists %}
+                <ul class="interaction-list">
+                    {% for interaction in lead.interactions.all %}
+                        <li class="interaction-item">
+                            <div class="interaction-meta">
+                                <span><i class="far fa-clock me-1"></i>{{ interaction.created_at|date:"d M Y" }}</span>
+                                <span>{{ interaction.created_at|date:"H:i" }} WIB</span>
+                                <span>{{ interaction.created_at|timesince }} lalu</span>
+                            </div>
+                            <div class="interaction-note">
+                                {{ interaction.note|linebreaksbr }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
                 <div class="empty-state">
                     <i class="far fa-comment-dots fa-2x mb-3"></i>
                     <p class="mb-0">Belum ada interaksi yang tercatat.</p>
                 </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
 
