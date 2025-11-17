@@ -1,156 +1,341 @@
+{% extends 'dashboard/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Detail Lead</title>
+
+{% block title %}Detail Lead{% endblock %}
+
+{% block extra_css %}
 <style>
-/* ======== GAYA UMUM ======== */
-body {
-  font-family: "Segoe UI", Tahoma, sans-serif;
-  margin: 30px;
-  background-color: #f9fafc;
-  color: #333;
-}
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
 
-h3, h4 {
-  color: #2b3a55;
-  border-left: 4px solid #4CAF50;
-  padding-left: 8px;
-  margin-top: 25px;
-}
+    .page-header h1 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 0;
+        color: #111827;
+    }
 
-form {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
+    .badge {
+        border-radius: 999px;
+        padding: 0.35rem 0.75rem;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
 
-/* ======== INPUT DAN SELECT ======== */
-select, input[type="text"], textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
+    .lead-overview-card {
+        background: linear-gradient(135deg, #eef2ff 0%, #fdf2f8 100%);
+        border-radius: 20px;
+        padding: 28px;
+        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+        margin-bottom: 2rem;
+        border: 1px solid rgba(59, 130, 246, 0.12);
+    }
 
-select:focus, input:focus, textarea:focus {
-  border-color: #4CAF50;
-  outline: none;
-}
+    .lead-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
 
-/* ======== TOMBOL ======== */
-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  font-size: 15px;
-  padding: 8px 16px;
-  border-radius: 6px;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+    .stat-chip {
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        min-width: 160px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
 
-button:hover {
-  background-color: #45a049;
-}
+    .stat-chip i {
+        color: #2563eb;
+    }
 
-/* ======== DAFTAR INTERAKSI ======== */
-ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 15px;
-}
+    .info-card {
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.08);
+        padding: 24px;
+        height: 100%;
+    }
 
-ul li {
-  background-color: #fff;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
+    .info-card h2 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2563eb;
+        margin-bottom: 1.25rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
 
-hr {
-  margin: 30px 0;
-  border: none;
-  border-top: 2px dashed #ccc;
-}
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
 
-/* Badge styles */
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 4px;
-  color: white;
-}
+    .info-item span {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #6b7280;
+        margin-bottom: 0.4rem;
+    }
 
-.bg-danger { background-color: #dc3545; }
-.bg-warning { background-color: #ffc107; color: black; }
-.bg-secondary { background-color: #6c757d; }
-.bg-success { background-color: #28a745; }
-.bg-primary { background-color: #007bff; }
+    .info-item strong {
+        font-size: 1rem;
+        color: #111827;
+    }
+
+    .info-item strong a {
+        text-decoration: none;
+    }
+
+    .card-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .card-action small {
+        color: #6b7280;
+    }
+
+    .status-card select {
+        min-height: 48px;
+    }
+
+    .interaction-card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 18px;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.05);
+        margin-bottom: 1rem;
+    }
+
+    .interaction-card time {
+        display: block;
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin-bottom: 0.4rem;
+    }
+
+    .empty-state {
+        background: #f9fafb;
+        border: 1px dashed #d1d5db;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    .interaction-form textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    @media (max-width: 992px) {
+        .lead-stats {
+            flex-direction: column;
+        }
+    }
 </style>
-</head>
+{% endblock %}
 
-<body>
-
-<h3>Detail Lead: {{ lead.name }}</h3>
-<div style="background-color: #fff; padding: 20px; border-radius: 10px; margin-top: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-    <p><strong>Nama:</strong> {{ lead.name }}</p>
-    <p><strong>Email:</strong> {{ lead.email|default:"-" }}</p>
-    <p><strong>Phone:</strong> {{ lead.phone|default:"-" }}</p>
-    <p><strong>Perusahaan:</strong> {{ lead.company|default:"-" }}</p>
-    <p><strong>Account Medsos:</strong> {{ lead.account_medsos|default:"-" }}</p>
-    <p><strong>Lead Source:</strong> {{ lead.get_lead_source_display|default:"-" }}</p>
-    <p><strong>Priority:</strong> <span class="badge {% if lead.priority == 'hot' %}bg-danger{% elif lead.priority == 'warm' %}bg-warning{% else %}bg-secondary{% endif %}">{{ lead.get_priority_display }}</span></p>
-    <p><strong>Assigned To:</strong> {% if lead.assigned_to %}{{ lead.assigned_to.get_full_name|default:lead.assigned_to.username }}{% else %}-{% endif %}</p>
-    <p><strong>Estimated Value:</strong> {% if lead.estimated_value %}Rp {{ lead.estimated_value|floatformat:0 }}{% else %}-{% endif %}</p>
-    <p><strong>Next Follow-up:</strong> {% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d/m/Y" }}{% else %}-{% endif %}</p>
-    <p><strong>Status:</strong> <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">{{ lead.get_status_display }}</span></p>
-    <p><strong>Created At:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
-    <p><strong>Jumlah Interaksi:</strong> {{ lead.jumlah_interaksi }}</p>
-    <p><strong>Interaksi Terakhir:</strong> {% if lead.interaksi_terakhir %}{{ lead.interaksi_terakhir|date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Detail Lead</h1>
+        <p class="text-muted mb-0">Informasi lengkap terkait status dan interaksi dengan lead.</p>
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+        <a href="{% url 'leads:lead_list' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-1"></i>
+            Kembali
+        </a>
+        <a href="{% url 'leads:lead_edit' lead.pk %}" class="btn btn-primary">
+            <i class="fas fa-edit me-1"></i>
+            Edit Lead
+        </a>
+    </div>
 </div>
 
-<hr>
+<div class="lead-overview-card">
+    <div class="d-flex flex-wrap justify-content-between gap-3">
+        <div>
+            <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">{{ lead.get_status_display }}</span>
+            <h2 class="mt-3 mb-2">{{ lead.name }}</h2>
+            <p class="text-muted mb-2">
+                {% if lead.company %}<i class="fas fa-building me-2"></i>{{ lead.company }}{% else %}<span class="text-muted">Perusahaan belum diisi</span>{% endif %}
+            </p>
+            <p class="mb-0">
+                <i class="fas fa-map-marker-alt me-2 text-primary"></i>{{ lead.get_lead_source_display|default:"Lead source belum diisi" }}
+            </p>
+        </div>
+        <div class="text-md-end">
+            <div class="text-muted">Dibuat pada</div>
+            <h4 class="fw-semibold mb-1">{{ lead.created_at|date:"d M Y, H:i" }}</h4>
+            <small class="text-muted">{{ lead.created_at|timesince }} yang lalu</small>
+        </div>
+    </div>
 
-<h3>Ubah Status</h3>
-<form method="post">
-  {% csrf_token %}
-  <label for="status">Status Lead:</label>
-  <select name="status" id="status">
-    {% for key, label in lead.STATUS_CHOICES %}
-      <option value="{{ key }}" {% if lead.status == key %}selected{% endif %}>{{ label }}</option>
-    {% endfor %}
-  </select>
-  <button type="submit" name="change_status">Simpan</button>
-</form>
+    <div class="lead-stats mt-4">
+        <div class="stat-chip">
+            <i class="fas fa-comments"></i>
+            <div>
+                <small class="text-muted d-block">Jumlah Interaksi</small>
+                {{ lead.jumlah_interaksi }}x
+            </div>
+        </div>
+        <div class="stat-chip">
+            <i class="fas fa-clock"></i>
+            <div>
+                <small class="text-muted d-block">Interaksi Terakhir</small>
+                {% if lead.interaksi_terakhir %}
+                    {{ lead.interaksi_terakhir|date:"d M Y, H:i" }}
+                {% else %}
+                    Belum ada
+                {% endif %}
+            </div>
+        </div>
+        <div class="stat-chip">
+            <i class="fas fa-calendar-check"></i>
+            <div>
+                <small class="text-muted d-block">Follow-up Berikutnya</small>
+                {% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d M Y" }}{% else %}Belum dijadwalkan{% endif %}
+            </div>
+        </div>
+        <div class="stat-chip">
+            <i class="fas fa-coins"></i>
+            <div>
+                <small class="text-muted d-block">Estimasi Nilai</small>
+                {% if lead.estimated_value %}Rp {{ lead.estimated_value|floatformat:0 }}{% else %}Belum diisi{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-<hr>
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="info-card">
+            <h2><i class="fas fa-id-badge"></i> Informasi Kontak</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span>Email</span>
+                    <strong>{{ lead.email|default:"-" }}</strong>
+                </div>
+                <div class="info-item">
+                    <span>Nomor Telepon</span>
+                    <strong>{{ lead.phone|default:"-" }}</strong>
+                </div>
+                <div class="info-item">
+                    <span>Account Medsos</span>
+                    <strong>{{ lead.account_medsos|default:"-" }}</strong>
+                </div>
+                <div class="info-item">
+                    <span>Assigned To</span>
+                    <strong>{% if lead.assigned_to %}{{ lead.assigned_to.get_full_name|default:lead.assigned_to.username }}{% else %}-{% endif %}</strong>
+                </div>
+                <div class="info-item">
+                    <span>Prioritas</span>
+                    <strong>
+                        <span class="badge {% if lead.priority == 'hot' %}bg-danger{% elif lead.priority == 'warm' %}bg-warning text-dark{% else %}bg-secondary{% endif %}">{{ lead.get_priority_display }}</span>
+                    </strong>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<h3>Interaksi</h3>
-<ul>
-  {% for i in lead.interactions.all %}
-    <li>🕒 {{ i.created_at|date:"d M Y H:i" }} — {{ i.note }}</li>
-  {% empty %}
-    <li>Belum ada interaksi.</li>
-  {% endfor %}
-</ul>
+    <div class="col-lg-5">
+        <div class="info-card status-card">
+            <div class="card-action mb-3">
+                <h2><i class="fas fa-sync-alt"></i> Ubah Status</h2>
+                <small>Pilih status terbaru untuk lead ini.</small>
+            </div>
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-12">
+                    <label for="status" class="form-label">Status Lead</label>
+                    <select name="status" id="status" class="form-select">
+                        {% for key, label in lead.STATUS_CHOICES %}
+                            <option value="{{ key }}" {% if lead.status == key %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12 text-end">
+                    <button type="submit" name="change_status" class="btn btn-primary btn-icon">
+                        <i class="fas fa-save"></i>
+                        Simpan Status
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-<h4>Tambah Interaksi</h4>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Tambah Interaksi</button>
-</form>
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <div class="info-card">
+            <div class="card-action mb-3">
+                <h2><i class="fas fa-comments"></i> Riwayat Interaksi</h2>
+                <small>Catatan percakapan dan tindak lanjut.</small>
+            </div>
 
-</body>
-</html>
+            {% for interaction in lead.interactions.all %}
+                <div class="interaction-card">
+                    <time><i class="far fa-clock me-2"></i>{{ interaction.created_at|date:"d M Y, H:i" }}</time>
+                    <p class="mb-0">{{ interaction.note }}</p>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <i class="far fa-comment-dots fa-2x mb-3"></i>
+                    <p class="mb-0">Belum ada interaksi yang tercatat.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="info-card interaction-form">
+            <div class="card-action mb-3">
+                <h2><i class="fas fa-plus-circle"></i> Tambah Interaksi</h2>
+                <small>Simpan catatan komunikasi terbaru.</small>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">{{ field.errors|striptags }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success btn-icon">
+                        <i class="fas fa-paper-plane"></i>
+                        Simpan Interaksi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
