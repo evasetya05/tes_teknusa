@@ -108,18 +108,16 @@ hr {
     <p><strong>Email:</strong> {{ lead.email|default:"-" }}</p>
     <p><strong>Phone:</strong> {{ lead.phone|default:"-" }}</p>
     <p><strong>Perusahaan:</strong> {{ lead.company|default:"-" }}</p>
+    <p><strong>Account Medsos:</strong> {{ lead.account_medsos|default:"-" }}</p>
     <p><strong>Lead Source:</strong> {{ lead.get_lead_source_display|default:"-" }}</p>
     <p><strong>Priority:</strong> <span class="badge {% if lead.priority == 'hot' %}bg-danger{% elif lead.priority == 'warm' %}bg-warning{% else %}bg-secondary{% endif %}">{{ lead.get_priority_display }}</span></p>
-    <p><strong>Assigned To:</strong> {{ lead.assigned_to.get_full_name|default:lead.assigned_to.username if lead.assigned_to else "-" }}</p>
+    <p><strong>Assigned To:</strong> {% if lead.assigned_to %}{{ lead.assigned_to.get_full_name|default:lead.assigned_to.username }}{% else %}-{% endif %}</p>
     <p><strong>Estimated Value:</strong> {% if lead.estimated_value %}Rp {{ lead.estimated_value|floatformat:0 }}{% else %}-{% endif %}</p>
-    <p><strong>Next Follow-up:</strong> {{ lead.next_follow_up|date:"d/m/Y" if lead.next_follow_up else "-" }}</p>
+    <p><strong>Next Follow-up:</strong> {% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d/m/Y" }}{% else %}-{% endif %}</p>
     <p><strong>Status:</strong> <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">{{ lead.get_status_display }}</span></p>
     <p><strong>Created At:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
     <p><strong>Jumlah Interaksi:</strong> {{ lead.jumlah_interaksi }}</p>
-    <p><strong>Interaksi Terakhir:</strong> {{ lead.interaksi_terakhir|date:"d/m/Y H:i" if lead.interaksi_terakhir else "-" }}</p>
-    {% if lead.general_notes %}
-    <p><strong>General Notes:</strong> {{ lead.general_notes }}</p>
-    {% endif %}
+    <p><strong>Interaksi Terakhir:</strong> {% if lead.interaksi_terakhir %}{{ lead.interaksi_terakhir|date:"d/m/Y H:i" }}{% else %}-{% endif %}</p>
 </div>
 
 <hr>

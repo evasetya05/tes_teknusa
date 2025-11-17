@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import LeadForm, InteractionForm
+from .forms import LeadForm, InteractionForm, InteractionFormSet
 from django.db.models import OuterRef, Subquery
 from django.db.models import OuterRef, Subquery, DateTimeField
 from django.db.models.functions import Coalesce
@@ -25,7 +25,7 @@ def lead_detail(request, pk):
             if new_status in dict(Lead.STATUS_CHOICES):
                 lead.status = new_status
                 lead.save()
-                return redirect('lead_detail', pk=lead.pk)
+                return redirect('leads:lead_detail', pk=lead.pk)
 
         # Cek jika user tambah interaksi
         form = InteractionForm(request.POST)
@@ -33,7 +33,7 @@ def lead_detail(request, pk):
             interaction = form.save(commit=False)
             interaction.lead = lead
             interaction.save()
-            return redirect('lead_detail', pk=lead.pk)
+            return redirect('leads:lead_detail', pk=lead.pk)
     else:
         form = InteractionForm()
 
@@ -52,11 +52,14 @@ def lead_create(request, pk=None):
 
     if request.method == 'POST':
         form = LeadForm(request.POST, instance=lead)
-        if form.is_valid():
+        formset = InteractionFormSet(request.POST, instance=lead)
+        if form.is_valid() and formset.is_valid():
             lead = form.save()
-            return redirect('lead_detail', pk=lead.pk)
+            formset.save()
+            return redirect('leads:lead_detail', pk=lead.pk)
     else:
         form = LeadForm(instance=lead)
+        formset = InteractionFormSet(instance=lead)
 
-    return render(request, 'leads/lead_form.html', {'form': form, 'lead': lead})
+    return render(request, 'leads/lead_form.html', {'form': form, 'formset': formset, 'lead': lead})
 

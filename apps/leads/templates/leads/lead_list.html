@@ -17,75 +17,126 @@
     <style>
     /* ======== TABEL ======== */
     .table-container {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
         overflow: hidden;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
     }
 
     .table {
         margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
-    .table th {
-        background-color: #f8f9fa;
-        border-bottom: 2px solid #dee2e6;
+    .table thead th {
+        background-color: #f4f6fb;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        color: #6b7280;
+        border-bottom: 0;
     }
 
-    .table td, .table th {
-        padding: 12px 16px;
-        vertical-align: middle;
+    .table tbody tr {
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .table tbody tr:hover {
-        background-color: rgba(0,0,0,.02);
+        background-color: #fdfdfd;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .table td, .table th {
+        padding: 14px 18px;
+        vertical-align: middle;
+        border-top: 1px solid #eef2ff;
+        white-space: nowrap;
+    }
+
+    .table td:first-child {
+        font-weight: 600;
+        color: #111827;
+        min-width: 200px;
+    }
+
+    .table td:nth-child(2),
+    .table td:nth-child(3),
+    .table td:nth-child(4),
+    .table td:nth-child(5) {
+        min-width: 150px;
     }
 
     .badge {
-        font-weight: 500;
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+    }
+
+    .stat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
         padding: 6px 10px;
-        border-radius: 4px;
+        border-radius: 8px;
+        background-color: #f3f4f6;
+        font-size: 13px;
+        color: #374151;
+    }
+
+    .stat-pill i {
+        color: #2563eb;
     }
 
     /* Responsive table */
     @media (max-width: 768px) {
         .table-container {
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
+            border-radius: 8px;
         }
-        
+
         .table thead {
             display: none;
         }
-        
+
         .table, .table tbody, .table tr, .table td {
             display: block;
             width: 100%;
         }
-        
+
         .table tr {
-            margin-bottom: 1rem;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
+            margin-bottom: 1.25rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
         }
-        
+
         .table td {
-            text-align: right;
-            padding-left: 50%;
+            text-align: left;
+            padding: 12px 16px 12px 120px;
             position: relative;
+            border-top: 1px solid #f3f4f6;
         }
-        
+
         .table td::before {
             content: attr(data-label);
             position: absolute;
             left: 16px;
-            width: 45%;
-            padding-right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             font-weight: 600;
-            text-align: left;
+            color: #6b7280;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        
+
+        .table td:first-child {
+            border-top: 0;
+        }
+
         .table td:last-child {
             border-bottom: 0;
         }
@@ -93,67 +144,46 @@
     </style>
 
     <div class="table-responsive">
-
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Nama</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Perusahaan</th>
-            <th>Lead Source</th>
-            <th>Priority</th>
-            <th>Assigned To</th>
-            <th>Estimated Value</th>
-            <th>Next Follow-up</th>
-            <th>Status</th>
-            <th>Jumlah Interaksi</th>
-            <th>Interaksi Terakhir</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for lead in leads %}
-        <tr>
-            <td data-label="Nama">
-                <a href="{% url 'leads:lead_edit' lead.pk %}">{{ lead.name }}</a>
-            </td>
-            <td data-label="Email">{{ lead.email|default:"-" }}</td>
-            <td data-label="Phone">{{ lead.phone|default:"-" }}</td>
-            <td data-label="Perusahaan">{{ lead.company|default:"-" }}</td>
-            <td data-label="Lead Source">{{ lead.get_lead_source_display|default:"-" }}</td>
-            <td data-label="Priority">
-                <span class="badge {% if lead.priority == 'hot' %}bg-danger{% elif lead.priority == 'warm' %}bg-warning{% else %}bg-secondary{% endif %}">
-                    {{ lead.get_priority_display }}
-                </span>
-            </td>
-            <td data-label="Assigned To">{% if lead.assigned_to %}{{ lead.assigned_to.get_full_name|default:lead.assigned_to.username }}{% else %}-{% endif %}</td>
-            <td data-label="Estimated Value">
-                {% if lead.estimated_value %}Rp {{ lead.estimated_value|floatformat:0 }}{% else %}-{% endif %}
-            </td>
-            <td data-label="Next Follow-up">{% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d/m/Y" }}{% else %}-{% endif %}</td>
-            <td data-label="Status">
-                <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">
-                    {{ lead.get_status_display }}
-                </span>
-            </td>
-            <td data-label="Jumlah Interaksi">{{ lead.jumlah_interaksi }}</td>
-            <td data-label="Interaksi Terakhir">
-                {% if lead.interaksi_terakhir %}
-                    {{ lead.interaksi_terakhir|date:"d/m/Y H:i" }}
-                    <br>
-                    <a href="{% url 'leads:lead_detail' lead.pk %}">Detail ➜</a>
-                {% else %}
-                    <em>Belum ada interaksi.</em>
-                    <br>
-                    <a href="{% url 'leads:lead_detail' lead.pk %}">Tambah</a>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="12">Belum ada lead.</td></tr>
-        {% endfor %}
-    </tbody>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Perusahaan</th>
+                    <th>Account Medsos</th>
+                    <th>Lead Source</th>
+                    <th>Next Follow-up</th>
+                    <th>Status</th>
+                    <th>Dibuat</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lead in leads %}
+                <tr>
+                    <td data-label="Nama">
+                        <a href="{% url 'leads:lead_edit' lead.pk %}" class="text-decoration-none text-primary fw-semibold">{{ lead.name }}</a>
+                    </td>
+                    <td data-label="Email">{{ lead.email|default:"-" }}</td>
+                    <td data-label="Phone">{{ lead.phone|default:"-" }}</td>
+                    <td data-label="Perusahaan">{{ lead.company|default:"-" }}</td>
+                    <td data-label="Account Medsos">{{ lead.account_medsos|default:"-" }}</td>
+                    <td data-label="Lead Source">{{ lead.get_lead_source_display|default:"-" }}</td>
+                    <td data-label="Next Follow-up">{% if lead.next_follow_up %}{{ lead.next_follow_up|date:"d/m/Y" }}{% else %}-{% endif %}</td>
+                    <td data-label="Status">
+                        <span class="badge {% if lead.status == 'won' %}bg-success{% elif lead.status == 'lost' %}bg-danger{% else %}bg-primary{% endif %}">
+                            {{ lead.get_status_display }}
+                        </span>
+                    </td>
+                    <td data-label="Dibuat">{{ lead.created_at|date:"d/m/Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="9" class="text-center py-4 text-muted">Belum ada lead.</td></tr>
+                {% endfor %}
+            </tbody>
         </table>
+    </div>
+
     </div>
 </div>
 {% endblock %}

@@ -48,7 +48,7 @@ urlpatterns = [
     path('rss/', AgrositeFeed()),
     path('comment/', include('comment.urls')),
     path('', include('accounts.urls', namespace='account')),
-    path('leads/', include('leads.urls')),
+    path('leads/', include('leads.urls', namespace='leads')),
     path('lean/', include('lean.urls')),
     path('ledger/', include('ledger.urls')),
     path('post_media/', include('post_media.urls')),
