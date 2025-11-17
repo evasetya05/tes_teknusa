@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Daftar Lead</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-toolbar mb-2 mb-md-0 align-items-center">
             <!-- Filter Dropdown -->
             <form method="get" class="d-inline me-3">
                 <select name="lead_source" onchange="this.form.submit()" class="form-select form-select-sm">
@@ -17,9 +17,14 @@
                     {% endfor %}
                 </select>
             </form>
-            <a href="{% url 'leads:lead_create' %}" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Tambah Lead
-            </a>
+            <div class="btn-group">
+                <a href="{% url 'leads:lead_analysis' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-chart-line"></i> Analisis Leads
+                </a>
+                <a href="{% url 'leads:lead_create' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Lead
+                </a>
+            </div>
         </div>
     </div>
 
