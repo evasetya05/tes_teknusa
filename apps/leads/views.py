@@ -6,10 +6,24 @@ from django.db.models.functions import Coalesce
 from .models import Lead, Interaction
 
 def lead_list(request):
-    # Simplified version to avoid complex queries
+    # Get filter parameter
+    lead_source_filter = request.GET.get('lead_source')
+    
+    # Base queryset
     leads = Lead.objects.all().order_by('-created_at')
+    
+    # Apply filter if specified
+    if lead_source_filter:
+        leads = leads.filter(lead_source=lead_source_filter)
+    
+    # Get lead source choices for dropdown
+    lead_source_choices = Lead.LEAD_SOURCE_CHOICES
 
-    return render(request, 'leads/lead_list.html', {'leads': leads})
+    return render(request, 'leads/lead_list.html', {
+        'leads': leads,
+        'lead_source_choices': lead_source_choices,
+        'selected_lead_source': lead_source_filter,
+    })
 
 
 def lead_detail(request, pk):
