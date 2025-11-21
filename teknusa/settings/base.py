@@ -22,7 +22,7 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 SITE_ID = 1
 
@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'haystack',
     'mdeditor',
     'ckeditor',
+    'ckeditor_uploader',
     'crispy_forms',
     'rest_framework',
     'django_summernote',
