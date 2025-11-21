@@ -46,11 +46,11 @@ def create_journal_entry(request):
                 )
 
             messages.success(request, f"Jurnal berhasil dibuat untuk periode {journal.period}.")
-            return redirect('journal_list')
+            return redirect('ledger:journal_list')
 
         except ValueError as e:
             messages.error(request, str(e))
-            return redirect('journal_list')
+            return redirect('ledger:journal_list')
 
     return render(request, 'ledger/journal_entry.html', {
         'today': now().date(),
